@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="tech.iwish.farm_fresh">
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:supportsRtl="true"
+        />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+
+
+    <application
+        android:name="tech.iwish.farm_fresh.AppController"
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@mipmap/logo_main"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@drawable/farm_logo"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="tech.iwish.farm_fresh.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="tech.iwish.farm_fresh.MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="tech.iwish.farm_fresh.networkconnectivity.NetworkError" />
+        <activity
+            android:name="tech.iwish.farm_fresh.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="tech.iwish.farm_fresh.RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <!-- Firebase Notifications -->
+        <service android:name="fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name="fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- ./Firebase Notifications -->
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_live_rdriRt6jT0glOp"
+            />
+
+        <activity android:name="tech.iwish.farm_fresh.SelectStore" />
+        <activity android:name="tech.iwish.farm_fresh.SelectCity" />
+        <activity
+            android:name="tech.iwish.farm_fresh.ForgotActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="tech.iwish.farm_fresh.PaymentGatWay"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="tech.iwish.farm_fresh.My_Order_activity" />
+        <activity android:name="tech.iwish.farm_fresh.MyOrderDetail" />
+        <activity android:name="tech.iwish.farm_fresh.RechargeWallet" />
+        <meta-data android:name="android.support.multidex.MultiDexApplication"
+            android:value="true" />
+
+        <activity android:name="tech.iwish.farm_fresh.ThanksOrder" />
+        <activity android:name="tech.iwish.farm_fresh.OrderFail" />
+        <activity
+            android:name="com.paytm.pgsdk.PaytmPGActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name="tech.iwish.farm_fresh.Paytm" />
+        <activity android:name="tech.iwish.farm_fresh.networkconnectivity.NoInternetConnection" />
+    </application>
+
+
+</manifest>
