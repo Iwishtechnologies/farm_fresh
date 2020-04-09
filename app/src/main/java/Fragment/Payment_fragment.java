@@ -40,7 +40,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Config.BaseURL;
+import Config.Constants;
 import Config.SharedPref;
+import Connection.ConnectionServer;
 import tech.iwish.farm_fresh.AppController;
 import tech.iwish.farm_fresh.MainActivity;
 import tech.iwish.farm_fresh.PaymentGatWay;
@@ -83,7 +85,7 @@ public class Payment_fragment extends Fragment {
     String getwallet;
     LinearLayout Promo_code_layout, Coupon_and_wallet;
     RelativeLayout Apply_Coupon_Code, Relative_used_wallet, Relative_used_coupon;
-
+    String user_mob;
     public Payment_fragment() {
 
     }
@@ -103,6 +105,22 @@ public class Payment_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.activity_payment_method, container, false);
+
+
+//        Map<String, String> params = new HashMap<String, String>();
+//        final HashMap<String, String> data;
+//
+//        Session_management session_management = new Session_management(getActivity());
+//
+//        data =  session_management.getUserDetails();
+//        String UserId = data.get("user_id");
+//
+//        Wallet_fragment wallet_fragment = new Wallet_fragment();
+//        wallet_fragment.getRefresrh_payment(UserId);
+
+
+
+
         ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.payment));
 
         Prefrence_TotalAmmount = SharedPref.getString(getActivity(), BaseURL.TOTAL_AMOUNT);
@@ -144,7 +162,10 @@ public class Payment_fragment extends Fragment {
             }
         });
 
+
         sessionManagement = new Session_management(getActivity());
+
+
 
 
         Coupon_and_wallet = (LinearLayout) view.findViewById(R.id.coupon_and_wallet);
@@ -192,12 +213,15 @@ public class Payment_fragment extends Fragment {
         checkBox_Wallet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
+                if (isChecked)
+                    Use_Wallet_Ammont();
+
+                /*if (isChecked) {
                     Use_Wallet_Ammont();
 
                     Coupon_and_wallet.setVisibility(View.VISIBLE);
                     Relative_used_wallet.setVisibility(View.VISIBLE);
-                    if (rb_card.isChecked() || rb_Netbanking.isChecked() || rb_paytm.isChecked()) {
+                    if (rb_card.isChecked() || rb_Netbanking.isChecked() || rb_paytm.isChecked()  ){
                         rb_card.setChecked(false);
                         rb_Netbanking.setChecked(false);
                         rb_paytm.setChecked(false);
@@ -223,8 +247,8 @@ public class Payment_fragment extends Fragment {
                     if (checkBox_coupon.isChecked()) {
                         final String ammount = SharedPref.getString(getActivity(), BaseURL.COUPON_TOTAL_AMOUNT);
                         payble_ammount.setText(ammount+getResources().getString(R.string.currency));
-                    }
-                }
+                    }*/
+//                }
             }
         });
         checkBox_coupon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -236,12 +260,13 @@ public class Payment_fragment extends Fragment {
                     Promo_code_layout.setVisibility(View.VISIBLE);
                     Coupon_and_wallet.setVisibility(View.VISIBLE);
                     Relative_used_coupon.setVisibility(View.VISIBLE);
-                    if (rb_Store.isChecked() || rb_Cod.isChecked() || rb_card.isChecked() || rb_Netbanking.isChecked() || rb_paytm.isChecked()) {
+                    if (rb_Store.isChecked() || rb_Cod.isChecked() || rb_card.isChecked() || rb_Netbanking.isChecked() || rb_paytm.isChecked()  ) {
                         rb_Store.setChecked(false);
                         rb_Cod.setChecked(false);
                         rb_card.setChecked(false);
                         rb_Netbanking.setChecked(false);
                         rb_paytm.setChecked(false);
+
                     }
                 } else {
                     et_Coupon.setText("");
@@ -262,11 +287,11 @@ public class Payment_fragment extends Fragment {
 
                     confirm.setEnabled(false);
                     if (checkBox_Wallet.isChecked()){
-                        getuser_id = sessionManagement.getUserDetails().get(BaseURL.KEY_ID);
-
-                        Usewalletfororder(getuser_id,Used_Wallet_amount);
                         checked();
+//                        getuser_id = sessionManagement.getUserDetails().get(BaseURL.KEY_ID);
+//                        Usewalletfororder(getuser_id,order_ammount.getText().toString());
 
+                        confirm.setEnabled(true);
                     }
                     else {
                         checked();
@@ -280,7 +305,7 @@ public class Payment_fragment extends Fragment {
 
                     ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
                 }
-            }
+                }
         });
         return view;
     }
@@ -374,6 +399,9 @@ public class Payment_fragment extends Fragment {
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
 
+
+
+
     private void Usewalletfororder(String userid, String Wallet) {
         String tag_json_obj = "json_add_order_req";
         Map<String, String> params = new HashMap<String, String>();
@@ -388,6 +416,7 @@ public class Payment_fragment extends Fragment {
 
                 try {
                     String status = response.getString("responce");
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -407,9 +436,11 @@ public class Payment_fragment extends Fragment {
     }
 
     private void Use_Wallet_Ammont() {
+
         final String Wallet_Ammount = SharedPref.getString(getActivity(), BaseURL.KEY_WALLET_Ammount);
         final String Coupon_Ammount = SharedPref.getString(getActivity(), BaseURL.COUPON_TOTAL_AMOUNT);
         final String Ammount = SharedPref.getString(getActivity(), BaseURL.TOTAL_AMOUNT);
+
         if (NetworkConnection.connectionChecking(getActivity())) {
             RequestQueue rq = Volley.newRequestQueue(getActivity());
             StringRequest postReq = new StringRequest(Request.Method.POST, BaseURL.BASE_URL+"index.php/api/wallet_on_checkout",
@@ -424,8 +455,12 @@ public class Payment_fragment extends Fragment {
                                     JSONObject json_data = Jarray.getJSONObject(i);
                                     String Wallet_amount = json_data.getString("wallet");
                                      Used_Wallet_amount = json_data.getString("used_wallet");
+                                     if(!Used_Wallet_amount.equals("")){json_data.getString("used_wallet");}
+
                                     total_amount = json_data.getString("total");
+
                                     if (total_amount.equals("0")) {
+                                        rb_Store.setClickable(false);
                                         rb_Cod.setText("Home Delivery");
                                         getvalue = rb_Cod.getText().toString();
                                         rb_card.setClickable(false);
@@ -436,6 +471,7 @@ public class Payment_fragment extends Fragment {
                                         rb_paytm.setTextColor(getResources().getColor(R.color.gray));
                                         checkBox_coupon.setClickable(false);
                                         checkBox_coupon.setTextColor(getResources().getColor(R.color.gray));
+
                                     } else {
                                         if (total_amount != null) {
                                             rb_Cod.setText("Cash On Delivery");
@@ -453,6 +489,7 @@ public class Payment_fragment extends Fragment {
                                     used_wallet_ammount.setText("(" + getResources().getString(R.string.currency) + Used_Wallet_amount + ")");
                                     SharedPref.putString(getActivity(), BaseURL.WALLET_TOTAL_AMOUNT, total_amount);
                                     my_wallet_ammount.setText(Wallet_amount+getResources().getString(R.string.currency));
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -555,16 +592,56 @@ public class Payment_fragment extends Fragment {
 
 
     private void checked() {
+        String a = my_wallet_ammount.getText().toString();
+
+
         if (checkBox_Wallet.isChecked()) {
+
+
             if (rb_Store.isChecked() || rb_Cod.isChecked()) {
-                attemptOrder();
-            } else {
+//                attemptOrder();
+//                getuser_id = sessionManagement.getUserDetails().get(BaseURL.KEY_ID);
+//                Usewalletfororder(getuser_id,order_ammount.getText().toString());
+
+            }
+           else if(!a.equals(0+getActivity().getString(R.string.currency))){
+                attemptOrder_wallet();
+                getuser_id = sessionManagement.getUserDetails().get(BaseURL.KEY_ID);
+                Usewalletfororder(getuser_id,order_ammount.getText().toString());
+
+            }
+
+            else {
                 Toast.makeText(getActivity(), "Please Select One", Toast.LENGTH_SHORT).show();
             }
 
         }
         if (rb_Store.isChecked()) {
-            attemptOrder();
+            if (checkBox_Wallet.isChecked()) {
+
+                Toast.makeText(getActivity(), "czcscsdc", Toast.LENGTH_SHORT).show();
+                attemptOrder_cod();
+
+                String q = order_total_amount;
+                String e = total_amount;
+
+
+                float inta = Float.parseFloat(q);
+                int inte = Integer.parseInt(e);
+                float cc;
+                 cc  = inta - inte ;
+
+                String gg = Float.toString(cc);
+
+                getuser_id = sessionManagement.getUserDetails().get(BaseURL.KEY_ID);
+
+                Usewalletfororder_cod(getuser_id,gg);
+                attemptOrder_wallet();
+
+            }else{
+                attemptOrder();
+            }
+
         }
         if (rb_Cod.isChecked()) {
 
@@ -628,6 +705,221 @@ public class Payment_fragment extends Fragment {
 
 
     }
+//========================================================================================================
+
+    private void attemptOrder_wallet() {
+        ArrayList<HashMap<String, String>> items = db_cart.getCartAll();
+        rewards = Double.parseDouble(db_cart.getColumnRewards());
+        if (items.size() > 0) {
+            JSONArray passArray = new JSONArray();
+            for (int i = 0; i < items.size(); i++) {
+                HashMap<String, String> map = items.get(i);
+                JSONObject jObjP = new JSONObject();
+                try {
+                    jObjP.put("product_id", map.get("product_id"));
+                    jObjP.put("qty", map.get("qty"));
+                    jObjP.put("unit_value", map.get("unit_value"));
+                    jObjP.put("unit", map.get("unit"));
+                    jObjP.put("price", map.get("price"));
+                    jObjP.put("rewards", map.get("rewards"));
+                    passArray.put(jObjP);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            getuser_id = sessionManagement.getUserDetails().get(BaseURL.KEY_ID);
+
+            if (ConnectivityReceiver.isConnected()) {
+
+                Log.e(TAG, "from:" + gettime + "\ndate:" + getdate +
+                        "\n" + "\nuser_id:" + getuser_id + "\n" + getlocation_id + getstore_id + "\ndata:" + passArray.toString());
 
 
+                makeAddOrderRequest_wallet(getdate, gettime, getuser_id, getlocation_id, getstore_id, passArray);
+
+
+            }
+        }
+    }
+
+    private void makeAddOrderRequest_wallet(String date, String gettime, String userid, String
+            location, String store_id, JSONArray passArray) {
+        String tag_json_obj = "json_add_order_req";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("date", date);
+        params.put("time", gettime);
+        params.put("user_id", userid);
+        params.put("location", location);
+        params.put("store_id", store_id);
+        params.put("total_ammount",total_amount);
+        params.put("payment_method", "Wallet");
+        params.put("data", passArray.toString());
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.ADD_ORDER_URL, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    Boolean status = response.getBoolean("responce");
+                    if (status) {
+                        String msg = response.getString("data");
+                        String msg_arb=response.getString("data_arb");
+                        db_cart.clearCart();
+                        Bundle args = new Bundle();
+                        Fragment fm = new Thanks_fragment();
+                        args.putString("msg", msg);
+                        args.putString("msgarb",msg_arb);
+                        fm.setArguments(args);
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+
+//========================================================================================================
+//========================================================================================================
+
+    private void attemptOrder_cod() {
+        ArrayList<HashMap<String, String>> items = db_cart.getCartAll();
+        rewards = Double.parseDouble(db_cart.getColumnRewards());
+        if (items.size() > 0) {
+            JSONArray passArray = new JSONArray();
+            for (int i = 0; i < items.size(); i++) {
+                HashMap<String, String> map = items.get(i);
+                JSONObject jObjP = new JSONObject();
+                try {
+                    jObjP.put("product_id", map.get("product_id"));
+                    jObjP.put("qty", map.get("qty"));
+                    jObjP.put("unit_value", map.get("unit_value"));
+                    jObjP.put("unit", map.get("unit"));
+                    jObjP.put("price", map.get("price"));
+                    jObjP.put("rewards", map.get("rewards"));
+                    passArray.put(jObjP);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            getuser_id = sessionManagement.getUserDetails().get(BaseURL.KEY_ID);
+
+            if (ConnectivityReceiver.isConnected()) {
+
+                Log.e(TAG, "from:" + gettime + "\ndate:" + getdate +
+                        "\n" + "\nuser_id:" + getuser_id + "\n" + getlocation_id + getstore_id + "\ndata:" + passArray.toString());
+
+
+                makeAddOrderRequest_cod(getdate, gettime, getuser_id, getlocation_id, getstore_id, passArray);
+
+
+            }
+        }
+    }
+
+    private void makeAddOrderRequest_cod(String date, String gettime, String userid, String
+            location, String store_id, JSONArray passArray) {
+        String tag_json_obj = "json_add_order_req";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("date", date);
+        params.put("time", gettime);
+        params.put("user_id", userid);
+        params.put("location", location);
+        params.put("store_id", store_id);
+        params.put("total_ammount",payble_ammount.getText().toString());
+        params.put("payment_method", "COD + Wallet");
+        params.put("data", passArray.toString());
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.ADD_ORDER_URL, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    Boolean status = response.getBoolean("responce");
+                    if (status) {
+                        String msg = response.getString("data");
+                        String msg_arb=response.getString("data_arb");
+                        db_cart.clearCart();
+                        Bundle args = new Bundle();
+                        Fragment fm = new Thanks_fragment();
+                        args.putString("msg", msg);
+                        args.putString("msgarb",msg_arb);
+                        fm.setArguments(args);
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                .addToBackStack(null).commit();
+
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+    private void Usewalletfororder_cod(String userid, String Wallet) {
+        String tag_json_obj = "json_add_order_req";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userid);
+        params.put("wallet_amount", Wallet);
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.Wallet_CHECKOUT, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    String status = response.getString("responce");
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+//========================================================================================================
 }

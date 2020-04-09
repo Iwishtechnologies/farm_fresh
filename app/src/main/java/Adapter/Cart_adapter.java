@@ -106,11 +106,19 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
                     holder.tv_contetiy.setText(String.valueOf(qty));
                 }
 
+                dbHandler.setCart(map, Float.valueOf(holder.tv_contetiy.getText().toString()));
+
+                Double items = Double.parseDouble(dbHandler.getInCartItemQty(map.get("product_id")));
+                Double price = Double.parseDouble(map.get("price"));
+                Double reward = Double.parseDouble(map.get("rewards"));
+                holder.tv_total.setText("" + price * items);
+                holder.tv_reward.setText("" + reward * items);
+                updateintent();
+
                 if (holder.tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
                     dbHandler.removeItemFromCart(map.get("product_id"));
                     list.remove(position);
                     notifyDataSetChanged();
-
                     updateintent();
                 }
             }
@@ -124,12 +132,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
                 qty = qty + 1;
 
                 holder.tv_contetiy.setText(String.valueOf(qty));
-            }
-        });
-
-        holder.tv_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//                =======================================================================================
 
                 dbHandler.setCart(map, Float.valueOf(holder.tv_contetiy.getText().toString()));
 
@@ -138,8 +141,25 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
                 Double reward = Double.parseDouble(map.get("rewards"));
                 holder.tv_total.setText("" + price * items);
                 holder.tv_reward.setText("" + reward * items);
-             //   holder.tv_total.setText(activity.getResources().getString(R.string.tv_cart_total) + price * items + " " + activity.getResources().getString(R.string.currency));
+
                 updateintent();
+//                =======================================================================================
+            }
+        });
+
+        holder.tv_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//
+//                dbHandler.setCart(map, Float.valueOf(holder.tv_contetiy.getText().toString()));
+//
+//                Double items = Double.parseDouble(dbHandler.getInCartItemQty(map.get("product_id")));
+//                Double price = Double.parseDouble(map.get("price"));
+//                Double reward = Double.parseDouble(map.get("rewards"));
+//                holder.tv_total.setText("" + price * items);
+//                holder.tv_reward.setText("" + reward * items);
+//
+//                updateintent();
             }
         });
 

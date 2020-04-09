@@ -1,4 +1,4 @@
-package tech.iwish.farm_fresh;
+package tech.iwish.farm_fresh ;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,8 +27,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Config.BaseURL;
+import tech.iwish.farm_fresh.LocaleHelper;
+import tech.iwish.farm_fresh.R;
 import util.ConnectivityReceiver;
 import util.CustomVolleyJsonRequest;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ForgotActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,10 +44,10 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
     String lan;
     SharedPreferences preferences;
 
+
+
     @Override
     protected void attachBaseContext(Context newBase) {
-
-
 
         newBase = LocaleHelper.onAttach(newBase);
         super.attachBaseContext(newBase);
@@ -152,7 +156,7 @@ public class ForgotActivity extends AppCompatActivity implements View.OnClickLis
                             Toast.makeText(ForgotActivity.this, "" + error, Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            Toast.makeText(ForgotActivity.this, "" + error_arb, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(ForgotActivity.this, "" + error_arb, Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (JSONException e) {

@@ -98,7 +98,6 @@ public class Cart_fragment extends Fragment implements View.OnClickListener {
         data =  session_management.getUserDetails();
         user_phone = data.get(user_phone);
 
-//        Log.e("arraty",data.get());
 
         sessionManagement = new Session_management(getActivity());
         sessionManagement.cleardatetime();

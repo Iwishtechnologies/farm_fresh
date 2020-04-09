@@ -31,6 +31,7 @@ import util.ConnectivityReceiver;
 import util.Session_management;
 
 import static Config.BaseURL.IS_LOGIN;
+import static Config.BaseURL.KEY_ID;
 
 /**
  * Created by Rajesh Dabhi on 29/6/2017.
@@ -41,6 +42,7 @@ public class Wallet_fragment extends Fragment {
     private static String TAG = Wallet_fragment.class.getSimpleName();
 
     TextView Wallet_Ammount;
+    private Session_management session;
 
     private String user_email ,user_phone;
     RelativeLayout Recharge_Wallet;
@@ -108,7 +110,41 @@ public class Wallet_fragment extends Fragment {
     }
 
     public void getRefresrh() {
+
         String user_id = sessionManagement.getUserDetails().get(BaseURL.KEY_ID);
+        RequestQueue rq = Volley.newRequestQueue(getActivity());
+        StringRequest strReq = new StringRequest(Request.Method.GET, BaseURL.WALLET_REFRESH + user_id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            if (jObj.optString("success").equalsIgnoreCase("success")) {
+                                String wallet_amount = jObj.getString("wallet");
+                                Wallet_Ammount.setText(wallet_amount);
+                                SharedPref.putString(getActivity(), BaseURL.KEY_WALLET_Ammount, wallet_amount);
+                            } else {
+                                // Toast.makeText(DashboardPage.this, "" + jObj.optString("msg"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+        };
+        rq.add(strReq);
+    }
+    public void getRefresrh_payment() {
+
+        String user_id = session.getUserDetails().get(KEY_ID);
         RequestQueue rq = Volley.newRequestQueue(getActivity());
         StringRequest strReq = new StringRequest(Request.Method.GET, BaseURL.WALLET_REFRESH + user_id,
                 new Response.Listener<String>() {

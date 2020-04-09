@@ -94,18 +94,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
                 qty = qty + 1;
                 tv_contetiy.setText(String.valueOf(qty));
 
-            } else if (id == R.id.iv_subcat_minus) {
-
-                int qty = 0;
-                if (!tv_contetiy.getText().toString().equalsIgnoreCase(""))
-                    qty = Integer.valueOf(tv_contetiy.getText().toString());
-
-                if (qty > 0) {
-                    qty = qty - 1;
-                    tv_contetiy.setText(String.valueOf(qty));
-                }
-
-            } else if (id == R.id.tv_subcat_add) {
+//      ==============================================================================================================
                 HashMap<String, String> map = new HashMap<>();
                 preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
                 language=preferences.getString("language","");
@@ -132,21 +121,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
                 map.put("title", modelList.get(position).getTitle());
 
 
-                if (!tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
-                    if (dbcart.isInCart(map.get("product_id"))) {
-                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
-                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-
-                    } else {
-                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
-                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
-
-                    }
-                } else {
-                    dbcart.removeItemFromCart(map.get("product_id"));
-                    tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
-
-                }
+                dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));//   extra
                 Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
 
                 Double price = Double.parseDouble(map.get("price").trim());
@@ -158,7 +133,121 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
                 tv_total.setText("" + price * items);
                 ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
 
-            } else if (id == R.id.iv_subcat_img) {
+
+//      =============================================================================================
+            } else if (id == R.id.iv_subcat_minus) {
+
+                int qty = 0;
+                if (!tv_contetiy.getText().toString().equalsIgnoreCase(""))
+                    qty = Integer.valueOf(tv_contetiy.getText().toString());
+
+                if (qty > 0) {
+                    qty = qty - 1;
+                    tv_contetiy.setText(String.valueOf(qty));
+                }
+//      ==============================================================================================================
+                HashMap<String, String> map = new HashMap<>();
+                preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
+                language=preferences.getString("language","");
+
+
+                map.put("product_id", modelList.get(position).getProduct_id());
+                map.put("product_name", modelList.get(position).getProduct_name());
+                map.put("category_id", modelList.get(position).getCategory_id());
+                map.put("product_description", modelList.get(position).getProduct_description());
+                map.put("deal_price", modelList.get(position).getDeal_price());
+                map.put("start_date", modelList.get(position).getStart_date());
+                map.put("start_time", modelList.get(position).getStart_time());
+                map.put("end_date", modelList.get(position).getEnd_date());
+                map.put("end_time", modelList.get(position).getEnd_time());
+                map.put("price", modelList.get(position).getPrice());
+                map.put("product_image", modelList.get(position).getProduct_image());
+                map.put("status", modelList.get(position).getStatus());
+                map.put("in_stock", modelList.get(position).getIn_stock());
+                map.put("unit_value", modelList.get(position).getUnit_value());
+                map.put("unit", modelList.get(position).getUnit());
+                map.put("increament", modelList.get(position).getIncreament());
+                map.put("rewards", modelList.get(position).getRewards());
+                map.put("stock", modelList.get(position).getStock());
+                map.put("title", modelList.get(position).getTitle());
+
+
+                dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));//   extra
+                Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
+
+                Double price = Double.parseDouble(map.get("price").trim());
+                Double reward = Double.parseDouble(map.get("rewards"));
+                totmap.put(view,price * items);
+
+                fintot(totmap);
+                tv_reward.setText("" + reward * items);
+                tv_total.setText("" + price * items);
+                ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
+
+
+//=============================================================================================
+            } else if (id == R.id.tv_subcat_add) {
+
+
+//                HashMap<String, String> map = new HashMap<>();
+//                preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
+//                language=preferences.getString("language","");
+//
+//
+//                map.put("product_id", modelList.get(position).getProduct_id());
+//                map.put("product_name", modelList.get(position).getProduct_name());
+//                map.put("category_id", modelList.get(position).getCategory_id());
+//                map.put("product_description", modelList.get(position).getProduct_description());
+//                map.put("deal_price", modelList.get(position).getDeal_price());
+//                map.put("start_date", modelList.get(position).getStart_date());
+//                map.put("start_time", modelList.get(position).getStart_time());
+//                map.put("end_date", modelList.get(position).getEnd_date());
+//                map.put("end_time", modelList.get(position).getEnd_time());
+//                map.put("price", modelList.get(position).getPrice());
+//                map.put("product_image", modelList.get(position).getProduct_image());
+//                map.put("status", modelList.get(position).getStatus());
+//                map.put("in_stock", modelList.get(position).getIn_stock());
+//                map.put("unit_value", modelList.get(position).getUnit_value());
+//                map.put("unit", modelList.get(position).getUnit());
+//                map.put("increament", modelList.get(position).getIncreament());
+//                map.put("rewards", modelList.get(position).getRewards());
+//                map.put("stock", modelList.get(position).getStock());
+//                map.put("title", modelList.get(position).getTitle());
+//
+//
+//                if (!tv_contetiy.getText().toString().equalsIgnoreCase("0")) {
+//                    if (dbcart.isInCart(map.get("product_id"))) {
+//                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
+//                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+//
+//                    } else {
+//                        dbcart.setCart(map, Float.valueOf(tv_contetiy.getText().toString()));
+//                        tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
+//
+//                    }
+//                } else {
+//                    dbcart.removeItemFromCart(map.get("product_id"));
+//                    tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
+//
+//                }
+//
+//                Double items = Double.parseDouble(dbcart.getInCartItemQty(map.get("product_id")));
+//
+//                Double price = Double.parseDouble(map.get("price").trim());
+//                Double reward = Double.parseDouble(map.get("rewards"));
+//                totmap.put(view,price * items);
+//
+//                fintot(totmap);
+//                tv_reward.setText("" + reward * items);
+//                tv_total.setText("" + price * items);
+//                ((MainActivity) context).setCartCounter("" + dbcart.getCartCount());
+
+//================================================================================================================================
+
+} else if (id == R.id.iv_subcat_img) {
+
+
+
                 preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
                 language=preferences.getString("language","");
                 Log.d("lang",language);
@@ -169,6 +258,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
                             "",
                             position, tv_contetiy.getText().toString());
 
+
                 }else {
                     showProductDetail(modelList.get(position).getProduct_image(),
                             modelList.get(position).getProduct_name_arb(),
@@ -177,10 +267,8 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
                             position, tv_contetiy.getText().toString());
 
                 }
+
             }
-
-
-
 
 
 
@@ -220,9 +308,6 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
         holder.tv_reward.setText(mList.getRewards());
 //-------------------------------------
 
-        //if(Integer.valueOf(modelList.get(position).getPrice())== Integer.valueOf(modelList.get(position).getOldPrice())){
-//        if(Integer.parseInt(modelList.get(position).getPrice())== Integer.valueOf(modelList.get(position).getOldPrice())){
-
 
         if(Integer.parseInt(modelList.get(position).getPrice())== Integer.valueOf(modelList.get(position).getOldPrice())){
             holder.tv_price.setText("Price " + mList.getPrice()+ context.getResources().getString(R.string.currency));  // price
@@ -230,31 +315,13 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
             holder.old_price.setVisibility(View.GONE);
         }else{
 
-//            Log.e("sno",modelList.get(position).getProduct_id());
-//            Log.e("getprice", Integer.valueOf(modelList.get(position).getPrice()).toString());
-
-//            Log.e("getprice", Integer.valueOf(modelList.get(position).getOldPrice()).toString());
 
             holder.tv_price.setText("Price " + mList.getPrice()+ context.getResources().getString(R.string.currency));  // price
 
             holder.old_price.setText("Price: "+mList.getOldPrice());  // old price
             holder.old_price.setVisibility(View.VISIBLE);
         }
-//-----------------------------------------
 
-//        holder.tv_price.setText("Price " + mList.getPrice()+ context.getResources().getString(R.string.currency));  // price
-//
-//        Log.e("price", mList.getPrice());
-//
-//        holder.old_price.setText("Price: "+mList.getOldPrice());  // old price
-
-        // if(mList.getOldPrice()==null)
-        // holder.old_price.setVisibility(View.GONE);
-
-
-//        Log.e("sno",modelList.get(position).getProduct_id());
-//        Log.e("stock",Integer.valueOf(modelList.get(position).getStock()).toString());
-//        Log.e("get_in_stock",Integer.valueOf(modelList.get(position).getIn_stock()).toString());
 
         if ((Integer.parseInt(modelList.get(position).getStock())<=0) || (Integer.valueOf(modelList.get(position).getIn_stock())<=0)){
 
@@ -264,12 +331,14 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
             holder.tv_add.setEnabled(false);
             holder.iv_minus.setEnabled(false);
             holder.iv_plus.setEnabled(false);
+            holder.tv_add.setVisibility(View.VISIBLE);
 
         }
 
         else if (dbcart.isInCart(mList.getProduct_id())) {
             holder.tv_add.setText(context.getResources().getString(R.string.tv_pro_update));
             holder.tv_contetiy.setText(dbcart.getCartItemQty(mList.getProduct_id()));
+            holder.tv_add.setVisibility(View.GONE);
 
         } else {
             holder.tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
@@ -278,6 +347,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
             holder.tv_add.setEnabled(true);
             holder.iv_minus.setEnabled(true);
             holder.iv_plus.setEnabled(true);
+            holder.tv_add.setVisibility(View.GONE);
         }
 
         Double items = Double.parseDouble(dbcart.getInCartItemQty(mList.getProduct_id()));
@@ -352,6 +422,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
                 .load(BaseURL.IMG_PRODUCT_URL + image)
                 .crossFade()
                 .into(iv_image);
+//        =================================================================================================================
         if (Integer.valueOf(modelList.get(position).getStock())<=0){
             tv_add.setText(R.string.tv_out);
             tv_add.setTextColor(context.getResources().getColor(R.color.black));
@@ -367,6 +438,8 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
         } else {
             tv_add.setText(context.getResources().getString(R.string.tv_pro_add));
         }
+//        =============================================================================================================
+//        =============================================================================================================
 
         tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,6 +497,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
 
             }
         });
+//        =================================================================================================
 
         iv_plus.setOnClickListener(
                 new View.OnClickListener() {

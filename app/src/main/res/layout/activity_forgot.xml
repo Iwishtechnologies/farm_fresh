@@ -10,7 +10,7 @@
         android:id="@+id/icon"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@color/green" />
 
     <LinearLayout
@@ -23,7 +23,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/imageView"
             android:layout_width="fill_parent"
             android:layout_height="150dp"
@@ -34,6 +34,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
+            android:layout_marginTop="@dimen/space_10"
             android:layout_height="wrap_content">
             <Fonts.LatoBLack
                 android:id="@+id/tv_login_email"
